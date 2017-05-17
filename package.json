@@ -1,0 +1,22 @@
+{
+  "name": "electron_dingtalk",
+  "version": "1.0.0",
+  "description": "this is an dingtalk application for linux",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sebastian1011/electron_dingtalk.git"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "zmzhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sebastian1011/electron_dingtalk/issues"
+  },
+  "homepage": "https://github.com/Sebastian1011/electron_dingtalk#readme"
+}
