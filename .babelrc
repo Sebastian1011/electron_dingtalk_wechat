@@ -1,0 +1,14 @@
+{
+  "presets": ["latest", "react", "stage-0", "es2017"],
+  "plugins": [
+    [
+      "babel-plugin-filenamespace",
+      {
+        "root": "src/actions",
+        "separator": "_"
+      }
+    ],
+    "transform-runtime",
+    "transform-decorators-legacy"
+  ]
+}
