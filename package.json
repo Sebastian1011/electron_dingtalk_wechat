@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/Sebastian1011/electron_dingtalk#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.4.13"
+    "electron": "^1.6.8"
   }
 }
