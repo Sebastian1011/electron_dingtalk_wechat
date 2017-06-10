@@ -1,4 +1,4 @@
-const { app, BrowserWindow  } = require('electron');
+const { app, BrowserWindow, Tray, nativeImage  } = require('electron');
 const path = require('path');
 const url = require('url');
 const dingPage = require('./src/dingPage');
@@ -7,15 +7,16 @@ const dingPage = require('./src/dingPage');
 // 保持一个对于 window 对象的全局引用，如果你不这样做，
 // 当 JavaScript 对象被垃圾回收， window 会被自动地关闭
 let win;
+// let icon = nativeImage.createFromPath('/Users/somebody/images/icon.png')
 
 function createWindow () {
     // 创建浏览器窗口。
     win = new BrowserWindow(dingPage.DING_SIZE);
-
+    // win.setIcon(icon);
     win.loadURL(dingPage.WEB_DT);
 
     // 打开开发者工具。
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     // 当 window 被关闭，这个事件会被触发。
     win.on('closed', () => {

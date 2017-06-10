@@ -1,13 +1,15 @@
 /**
  * Created by Sebastian on 04/06/2017.
  */
+const path = require('path');
 'use strict';
 class DingPage{
 }
 DingPage.WEB_DT = "https://im.dingtalk.com/";
 DingPage.DING_SIZE = {
     width: 990,
-    height: 590
+    height: 590,
+	icon: path.join(__dirname, '../assets/icons/png/icon.png'),
 };
 DingPage.WINDOW_SIZE_LOGIN = {
     width: 380,
