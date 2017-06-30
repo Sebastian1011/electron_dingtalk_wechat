@@ -6,10 +6,14 @@ const path = require('path');
 class DingPage{
 }
 DingPage.WEB_DT = "https://im.dingtalk.com/";
-DingPage.DING_SIZE = {
+DingPage.WINDOW = {
     width: 990,
     height: 590,
 	icon: path.join(__dirname, '../assets/icons/png/icon.png'),
+	webPreferences:{
+        nodeIntegration: false,
+        preload: path.join(__dirname, './preloadScript/notification.js')
+    }
 };
 DingPage.WINDOW_SIZE_LOGIN = {
     width: 380,

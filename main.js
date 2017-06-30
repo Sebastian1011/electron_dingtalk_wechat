@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, nativeImage  } = require('electron');
+const { app, BrowserWindow, Tray, nativeImage, shell, ipcMain  } = require('electron');
 const path = require('path');
 const url = require('url');
 const dingPage = require('./src/dingPage');
@@ -11,7 +11,7 @@ let win;
 
 function createWindow () {
     // 创建浏览器窗口。
-    win = new BrowserWindow(dingPage.DING_SIZE);
+    win = new BrowserWindow(dingPage.WINDOW);
     // win.setIcon(icon);
     win.loadURL(dingPage.WEB_DT);
 
@@ -25,6 +25,27 @@ function createWindow () {
         // 与此同时，你应该删除相应的元素。
         win = null
     })
+    
+    // open link in a new browser window
+	win.webContents.on('will-navigate', handleRedirect);
+	win.webContents.on('new-window', handleRedirect);
+	
+	// listen notification
+    ipcMain.on('new-message', (event, arg) => {
+        console.log('new message: ', arg);
+	    event.sender.send('new-message-reply', arg)
+    })
+	
+	ipcMain.on('update-status', (event, arg) => {
+		console.log('update status: ', arg);
+		event.sender.send('update-status', arg)
+	})
+}
+function handleRedirect (e, url) {
+    if (url !== dingPage.WEB_DT){
+        e.preventDefault();
+        shell.openExternal(url);
+    }
 }
 
 // Electron 会在初始化后并准备
