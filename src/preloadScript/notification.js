@@ -9,9 +9,10 @@ const msgMap = {};
 function loadPage () {
 	console.log('Page loaded! ')
 	setTimeout(function () {
-		var menu = angular.element('.menu-item-content')[0];
+		const menu = angular.element('.menu-item-content')[0];
+		const convList = angular.element('.conv-lists conv-item')
 		console.log("menu is : ", menu);
-		if (!menu){
+		if (!menu || convList.length === 0){
 			console.log('load again!');
 			loadPage()
 		} else {
@@ -41,8 +42,9 @@ function initMsgMap() {
 		const backgroundImg = item.find('.group-avatar').children()[0].style['backgroundImage'];
 		const regex = /url\(\"(.*)\"\)/;
 		const url = regex.exec(backgroundImg);
+		const matchList = regex.exec(backgroundImg);
 		if (url){
-			convObj.background = regex.exec(backgroundImg)[1];
+			convObj.background = matchList && matchList[1] || path.join(__dirname, '../../assets/icons/png/icon.png');
 		}else {
 			convObj.background = path.join(__dirname, '../../assets/icons/png/icon.png');
 		}
@@ -68,27 +70,31 @@ function notify () {
 		const latestMsg = item.find('.latest-msg')[0].outerText;
 		const convObj = msgMap[key];
 		// update latest message
+		const backgroundImg = item.find('.group-avatar').children()[0].style['backgroundImage'];
+		const title = item.find('.title-wrap .name')[0].outerText;
+		const regex = /url\(\"(.*)\"\)/;
+		const matchList = regex.exec(backgroundImg);
+		const icon = matchList && matchList[1] || path.join(__dirname, '../../assets/icons/png/icon.png');
 		if (!convObj){
 			diffList.push(key);
-			const backgroundImg = item.find('.group-avatar').children(0).style['backgroundImage'];
-			const title = item.find('.title-wrap .name')[0].outerText;
-			const regex = new RegExp('url\\((.*)\\)', 'g');
 			msgMap[key] = {
 				title: title,
 				latestMsg: latestMsg,
-				background: regex.exec(backgroundImg)[1]
+				background: icon
 			}
 		}else if (latestMsg !== convObj.latestMsg){
 			diffList.push(key);
-			convObj.latestMsg = latestMsg
+			convObj.latestMsg = latestMsg;
+			convObj.title = title;
+			convObj.background = icon;
 		}
 		
 		// update mute status
 		const muteList = item.find('.icon-conv-mute');
 		if (muteList.length > 0){
-			convObj.isMute = muteList[0].className.indexOf('ng-hide') < 0
+			msgMap[key].isMute = muteList[0].className.indexOf('ng-hide') < 0
 		}else {
-			convObj.isMute = false;
+			msgMap[key].isMute = false;
 		}
 	}
 	
@@ -96,7 +102,8 @@ function notify () {
 		const id = diffList[j];
 		const notifyObj = msgMap[id];
 		if (notifyObj.isMute) continue;
-		const notification = new Notification(notifyObj.title, {
+		if (j > 5)break; // 最多显示5条通知
+		let notification = new Notification(notifyObj.title, {
 			icon: notifyObj.background,
 			body: notifyObj.latestMsg
 		})
