@@ -56,7 +56,6 @@ function doNotify (newVal, oldVal) {
 	}else {
 		ipcRenderer.send('update-status', newVal);
 	}
-	console.log('show notification');
 }
 
 function notify () {
@@ -96,7 +95,6 @@ function notify () {
 	for (let j = 0; j <diffList.length ; j++){
 		const id = diffList[j];
 		const notifyObj = msgMap[id];
-		console.log(notifyObj);
 		if (notifyObj.isMute) continue;
 		const notification = new Notification(notifyObj.title, {
 			icon: notifyObj.background,
