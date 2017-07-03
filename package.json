@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package": "electron-packager . --platform=linux --electron-version=1.6.8  --overwrite --icon=assets/icons/png/icon.png --arch=x64 --prune=true"
+    "package": "electron-packager . dingtalk --platform=linux --electron-version=1.6.8  --overwrite --icon=assets/icons/png/icon.png --arch=x64 --prune=true"
   },
   "repository": {
     "type": "git",
