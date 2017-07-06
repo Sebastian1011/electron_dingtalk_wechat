@@ -14,9 +14,13 @@ function createWindow () {
     win = new BrowserWindow(dingPage.WINDOW);
     // win.setIcon(icon);
     win.loadURL(dingPage.WEB_DT);
-
-    // 打开开发者工具。
-    win.webContents.openDevTools();
+	win.webContents.on('did-finish-load', function() {
+		win.show();
+	});
+	
+	
+	// 打开开发者工具。
+	// win.webContents.openDevTools();
 
     // 当 window 被关闭，这个事件会被触发。
     win.on('closed', () => {

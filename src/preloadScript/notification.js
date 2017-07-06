@@ -30,7 +30,7 @@ function loadPage () {
 						doNotify(newVal, oldVal);
 					}
 				})
-			})
+			}, 2000)
 		}
 	}, 2000)
 }
