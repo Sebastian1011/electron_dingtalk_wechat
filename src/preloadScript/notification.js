@@ -3,6 +3,7 @@
  *
  */
 const {ipcRenderer} = require('electron');
+const notifier = require('electron-notifications');
 const path = require('path');
 const msgMap = {};
 
@@ -16,15 +17,19 @@ function loadPage () {
 			console.log('load again!');
 			loadPage()
 		} else {
-			const rootScope = angular.element(document.body).injector().get('$rootScope')
-			initMsgMap();
-			rootScope.$watch(function () {
-				return parseInt(menu.textContent);
-			}, function (newVal, oldVal) {
-				if (newVal !== oldVal){
-					newVal = isNaN(newVal) ? 0 : newVal;
-					doNotify(newVal, oldVal);
-				}
+			setTimeout(function () {
+				const rootScope = angular.element(document.body).injector().get('$rootScope')
+				initMsgMap();
+				rootScope.$watch(function () {
+					const menuInfo = angular.element('.menu-item-content')[0];
+					return parseInt(menuInfo.textContent);
+				}, function (newVal, oldVal) {
+					if (newVal !== oldVal){
+						newVal = isNaN(newVal) ? 0 : newVal;
+						oldVal = isNaN(oldVal) ? 0 : oldVal;
+						doNotify(newVal, oldVal);
+					}
+				})
 			})
 		}
 	}, 2000)
@@ -53,9 +58,14 @@ function initMsgMap() {
 
 function doNotify (newVal, oldVal) {
 	if (newVal > oldVal){
-		notify();
+		setTimeout(function () {
+			notify();
+		});
 		ipcRenderer.send('new-message', newVal);
 	}else {
+		setTimeout(function () {
+			initMsgMap();
+		});
 		ipcRenderer.send('update-status', newVal);
 	}
 }
@@ -103,12 +113,31 @@ function notify () {
 		const notifyObj = msgMap[id];
 		if (notifyObj.isMute) continue;
 		if (j > 5)break; // 最多显示5条通知
-		let notification = new Notification(notifyObj.title, {
+		
+		const notification = notifier.notify(notifyObj.title, {
+			message: notifyObj.latestMsg,
+			buttons: ['open', 'close'],
 			icon: notifyObj.background,
-			body: notifyObj.latestMsg
+			id: id
 		})
-		notification.onclick = function () {
-			ipcRenderer.send('open-main-window');
+		
+		notification.on('buttonClicked', (text, buttonIndex, options) => {
+			if (text === 'open'){
+				triggerClickConv(options.id);
+				ipcRenderer.send('open-main-window');
+			}
+			notification.close()
+		})
+	}
+}
+
+function triggerClickConv (id) {
+	const convItems = angular.element('.conv-lists conv-item');
+	for (let i = 0; i < convItems.length; i++) {
+		const convItem = convItems[i];
+		const key = convItem.attributes['con-id'].value;
+		if (key === id){
+			angular.element(convItem).click()
 		}
 	}
 }
