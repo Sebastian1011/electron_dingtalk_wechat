@@ -62,3 +62,4 @@ typings/
 electron_dingtalk-linux-x64/
 *.tar.gz
 dingtalk-linux-x64/
+build/
