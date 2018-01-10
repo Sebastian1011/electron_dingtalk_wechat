@@ -1,6 +1,8 @@
 .main-container{
   width: 100%;
-  min-height: 526px;
+  height: 600px;
+  min-height: 600px;
+  overflow: hidden;
   .web-view {
     width: 100%;
     height:  100%;
@@ -8,7 +10,7 @@
   webview {
     display:inline-flex;
     width: 100%;
-    min-height: 523px;
+    min-height: 600px;
     height: 100%;
   }
 }

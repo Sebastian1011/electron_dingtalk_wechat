@@ -13,6 +13,14 @@ export default class App extends Component {
         }
         this.changeTab = this.changeTab.bind(this);
     }
+    componentDidMount(){
+        console.log('did mount')
+        // setInterval(()=>{
+        //     let myNotification = new Notification(new Date().getTime().toString(), {
+        //         body: '通知正文内容'
+        //     })
+        // }, 2000)
+    }
 
     changeTab(item){
         item && this.setState({navTab: item.key})

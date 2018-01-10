@@ -1,4 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 const path = require("path");
 const webpack = require('webpack');
 
@@ -88,7 +89,13 @@ module.exports = {
                 disable: false,
                 allChunks: true
             }
-        )
+        ),
+        new CopyWebpackPlugin([
+            {
+                from: path.join(__dirname, 'src/preloadScript/'),
+                to: path.join(__dirname, 'build/')
+            }
+        ])
     ]
 
 }

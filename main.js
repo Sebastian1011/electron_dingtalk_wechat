@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, nativeImage, shell, ipcMain  } = require('electron');
+const { app, BrowserWindow, Tray, nativeImage, shell, ipcMain, Notification  } = require('electron');
 const path = require('path');
 const url = require('url');
 const dingPage = require('./src/dingPage');
@@ -10,7 +10,7 @@ let win;
 // let icon = nativeImage.createFromPath('/Users/somebody/images/icon.png')
 const index_win = {
     width: 990,
-    height: 590,
+    height: 656,
     icon: path.join(__dirname, 'assets/icons/png/icon.png'),
 };
 
@@ -58,6 +58,16 @@ function createWindow () {
 		console.log('open main window')
 		win.show();
 	})
+    setInterval(function () {
+        const time =  new Date().getTime() + "";
+        console.log(time)
+        let notify = new Notification({
+            title: time,
+            body: "this is notify"
+        });
+        notify.show();
+        console.log(notify)
+    }, 2000)
 }
 function handleRedirect (e, url) {
     if (url !== dingPage.WEB_DT){
@@ -87,6 +97,6 @@ app.on('activate', () => {
         createWindow()
     }
 });
-app.use(express.static('assets'));
 // 在这文件，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
+app.setResizable(false);
