@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { shell } from 'electron';
 import reactDom from 'react-dom';
 import './webview.scss';
 
@@ -10,7 +11,6 @@ export default class Webview extends Component {
 
     componentDidMount(){
         const container = reactDom.findDOMNode(this.container);
-        console.log(container);
         const excludes = ['display', 'className'];
         const single = ['autosize', 'allowpopups'];
         let propStr = "";
@@ -22,15 +22,17 @@ export default class Webview extends Component {
                     propStr += `${prop}=${JSON.stringify(this.props[prop].toString())} `;
                 }
             }
-        })
+        });
         if(this.props.className){
             propStr += `class=${this.props.className} `;
         }
-        console.log(propStr);
-
         container.innerHTML = `<webview ${propStr}/>`
-
-
+        this.webview = container.firstChild;
+        this.webview.addEventListener('new-window', e => {
+            if(e.url !== this.props.src){
+                shell.openExternal(e.url);
+            }
+        })
     }
 
     render(){

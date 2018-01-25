@@ -2,6 +2,7 @@ const { app, BrowserWindow, Tray, nativeImage, shell, ipcMain, Notification  } =
 const path = require('path');
 const url = require('url');
 const dingPage = require('./src/dingPage');
+const shim = require('./build/notification_shim');
 
 
 // 保持一个对于 window 对象的全局引用，如果你不这样做，
@@ -17,8 +18,7 @@ const index_win = {
 function createWindow () {
     // 创建浏览器窗口。
     win = new BrowserWindow(index_win);
-    // win.setIcon(icon);
-    // win.loadURL(dingPage.WEB_DT);
+
     win.loadURL(url.format({
         protocol: 'file',
         pathname: path.join(__dirname, 'index.html')
@@ -37,7 +37,7 @@ function createWindow () {
         // 通常会把多个 window 对象存放在一个数组里面，
         // 与此同时，你应该删除相应的元素。
         win = null
-    })
+    });
     
     // open link in a new browser window
 	win.webContents.on('will-navigate', handleRedirect);
@@ -47,27 +47,20 @@ function createWindow () {
     ipcMain.on('new-message', (event, arg) => {
         console.log('new message: ', arg);
 	    event.sender.send('new-message-reply', arg)
-    })
+    });
 	
 	ipcMain.on('update-status', (event, arg) => {
 		console.log('update status: ', arg);
 		event.sender.send('update-status', arg)
-	})
+	});
 	
 	ipcMain.on('open-main-window', (event) => {
 		console.log('open main window')
 		win.show();
-	})
-    setInterval(function () {
-        const time =  new Date().getTime() + "";
-        console.log(time)
-        let notify = new Notification({
-            title: time,
-            body: "this is notify"
-        });
-        notify.show();
-        console.log(notify)
-    }, 2000)
+	});
+
+
+    win.setResizable(false);
 }
 function handleRedirect (e, url) {
     if (url !== dingPage.WEB_DT){
@@ -99,4 +92,3 @@ app.on('activate', () => {
 });
 // 在这文件，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
-app.setResizable(false);

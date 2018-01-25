@@ -64,6 +64,7 @@
   "dependencies": {
     "antd": "^3.1.1",
     "classnames": "^2.2.5",
+    "electron-notification-shim": "^1.1.0",
     "electron-notifications": "^1.0.0",
     "immutable": "^3.8.1",
     "jquery": "^3.2.1",

@@ -14,5 +14,7 @@ const { ipcRenderer } = require('electron');
         const main = document.getElementsByClassName('main')[0];
         main.style.minHeight = "auto";
     };
-    ipcRenderer.sendToHost('wechat_message', {"name": "hehehe", "message": "hahaha"})
+    window.sendToHost = function(options){
+        ipcRenderer.sendToHost('wechat_message', options)
+    }
 })(window);
